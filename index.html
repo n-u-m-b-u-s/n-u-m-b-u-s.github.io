@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>numbus</title>
+    <link rel="icon" type="image/png" href="numbus.png">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: white;
+            position: relative;
+        }
+        
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-left: 1px solid #ddd;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        h1 {
+            margin: 0 0 16px 0;
+            color: #000;
+            font-weight: 400;
+            font-size: 20px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 8px;
+        }
+        
+        .control-group {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .control-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .control-group h3 {
+            margin: 0 0 10px 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        button {
+            background: #000;
+            color: white;
+            border: 1px solid #000;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            width: 100%;
+            margin-bottom: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background: white;
+            color: #000;
+        }
+        
+        button:last-child {
+            margin-bottom: 0;
+        }
+        
+        .secondary-button {
+            background: white;
+            color: #000;
+            border: 1px solid #000;
+        }
+        
+        .secondary-button:hover {
+            background: #000;
+            color: white;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            background: #000;
+            color: white;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            display: block;
+            text-align: center;
+            transition: all 0.2s;
+            margin-bottom: 6px;
+            border: 1px solid #000;
+            font-family: inherit;
+        }
+        
+        .file-input-label:hover {
+            background: white;
+            color: #000;
+        }
+        
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #000;
+            font-size: 12px;
+            background: white;
+            font-family: inherit;
+            margin-bottom: 6px;
+        }
+        
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-width: 2px;
+        }
+        
+        .chart-title {
+            display: none;
+        }
+        
+        .chart-title input {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            color: #000;
+            padding: 4px 8px;
+            min-width: 200px;
+        }
+        
+        .chart-title input:focus {
+            outline: 1px solid #000;
+            background: white;
+        }
+        
+        .chart-title-svg {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        #chart-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            min-height: 0;
+            overflow: auto;
+        }
+        
+        #chart {
+            width: 800px;
+            height: 800px;
+            max-width: none;
+            max-height: none;
+            flex-shrink: 0;
+        }
+        
+        
+        .tooltip {
+            position: absolute;
+            background: #000;
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+            border: 1px solid #000;
+        }
+        
+        .bar, .line-point, .scatter-point {
+            fill: #000;
+            transition: fill 0.2s;
+        }
+        
+        .bar:hover, .line-point:hover, .scatter-point:hover {
+            fill: #666;
+        }
+        
+        .line-path {
+            fill: none;
+            stroke: #000;
+            stroke-width: 1;
+        }
+        
+        .axis-line {
+            stroke: #000;
+            stroke-width: 0.5;
+        }
+        
+        .axis-text {
+            font-size: 10px;
+            fill: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .grid-line {
+            stroke: #ddd;
+            stroke-width: 0.25;
+            stroke-dasharray: 1,1;
+        }
+        
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+                min-height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="main-content">
+            <div id="chart-container">
+                <svg id="chart" width="800" height="800" viewBox="0 0 800 800" style="width: 800px; height: 800px;"></svg>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <h1>numbus</h1>
+            
+            <div class="control-group">
+                <h3>Data</h3>
+                <button onclick="loadSampleData()">Load Sample Data</button>
+                <div class="file-input-wrapper">
+                    <input type="file" id="csv-upload" accept=".csv" onchange="handleFileUpload(event)">
+                    <label for="csv-upload" class="file-input-label">Upload CSV</label>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>Chart</h3>
+                <input type="text" id="chart-title" value="numbus" placeholder="Chart Title" onchange="updateChart()">
+                <select id="chart-type" onchange="changeChartType()">
+                    <option value="bar">Bar Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="scatter">Scatter Plot</option>
+                </select>
+                <input type="text" id="x-axis-title" placeholder="X-Axis Title" onchange="updateChart()">
+                <input type="text" id="y-axis-title" placeholder="Y-Axis Title" onchange="updateChart()">
+            </div>
+            
+            <div class="control-group">
+                <h3>Canvas</h3>
+                <input type="number" id="canvas-size" value="800" min="400" max="1200" step="50" placeholder="Size (Square)" onchange="updateCanvasSize()">
+            </div>
+            
+            <div class="control-group">
+                <h3>Export</h3>
+                <button onclick="exportPNG()">Export PNG</button>
+                <button class="secondary-button" onclick="copyToClipboard('png')">Copy PNG</button>
+                <button onclick="exportConfig()">Export Config</button>
+                <div class="file-input-wrapper">
+                    <input type="file" id="config-upload" accept=".json" onchange="importConfig(event)">
+                    <label for="config-upload" class="file-input-label">Import Config</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip" id="tooltip"></div>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>
