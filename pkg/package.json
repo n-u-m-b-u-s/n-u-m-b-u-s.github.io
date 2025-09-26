@@ -1,0 +1,15 @@
+{
+  "name": "numbus",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "numbus_bg.wasm",
+    "numbus.js",
+    "numbus.d.ts"
+  ],
+  "main": "numbus.js",
+  "types": "numbus.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

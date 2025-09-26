@@ -3,8 +3,8 @@ target/
 Cargo.lock
 **/*.rs.bk
 
-# WASM build artifacts
-pkg/
+# WASM build artifacts - but keep pkg for GitHub Pages
+# pkg/
 dist/
 
 # Node.js (if using npm for dev tools)
