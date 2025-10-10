@@ -1,0 +1,116 @@
+{
+  "svg": {
+    "id": "chart-svg",
+    "viewBox": {
+      "x": 0,
+      "y": 0,
+      "width": 800,
+      "height": 600
+    },
+    "elements": [
+      {
+        "type": "rect",
+        "attributes": {
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 600,
+          "fill": "#ffffff"
+        },
+        "id": "canvas-background"
+      },
+      {
+        "type": "g",
+        "id": "background",
+        "attributes": {},
+        "children": [
+          {
+            "type": "rect",
+            "attributes": {
+              "x": 100,
+              "y": 50,
+              "width": 650,
+              "height": 450,
+              "fill": "#f8f9fa",
+              "stroke": "#dee2e6",
+              "stroke-width": "2"
+            },
+            "id": "plot-area"
+          },
+          {
+            "type": "line",
+            "attributes": {
+              "x1": 100,
+              "y1": 500,
+              "x2": 750,
+              "y2": 500,
+              "stroke": "#2c3e50",
+              "stroke-width": "2"
+            },
+            "id": "x-axis"
+          },
+          {
+            "type": "line",
+            "attributes": {
+              "x1": 100,
+              "y1": 50,
+              "x2": 100,
+              "y2": 500,
+              "stroke": "#2c3e50",
+              "stroke-width": "2"
+            },
+            "id": "y-axis"
+          }
+        ]
+      },
+      {
+        "type": "g",
+        "id": "text",
+        "attributes": {},
+        "children": [
+          {
+            "type": "text",
+            "attributes": {
+              "x": 400,
+              "y": 30,
+              "font-size": "24",
+              "font-family": "Arial, sans-serif",
+              "font-weight": "bold",
+              "fill": "#2c3e50",
+              "text-anchor": "middle"
+            },
+            "id": "chart-title",
+            "textContent": "Chart Title"
+          },
+          {
+            "type": "text",
+            "attributes": {
+              "x": 425,
+              "y": 560,
+              "font-size": "16",
+              "font-family": "Arial, sans-serif",
+              "fill": "#495057",
+              "text-anchor": "middle"
+            },
+            "id": "x-axis-label",
+            "textContent": "X Axis Label"
+          },
+          {
+            "type": "text",
+            "attributes": {
+              "x": 30,
+              "y": 275,
+              "font-size": "16",
+              "font-family": "Arial, sans-serif",
+              "fill": "#495057",
+              "text-anchor": "middle",
+              "transform": "rotate(-90, 30, 275)"
+            },
+            "id": "y-axis-label",
+            "textContent": "Y Axis Label"
+          }
+        ]
+      }
+    ]
+  }
+}

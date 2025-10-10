@@ -1,0 +1,153 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="/assets/numbus.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Numbus</title>
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <div id="toolbar">
+        <div class="tool" id="tool-0" title="Chart Type"><img src="/assets/icons/chart.svg" alt="Chart"></div>
+        <div class="tool" id="tool-1" title="Select Data"><img src="/assets/icons/folder.svg" alt="Folder"></div>
+        <div class="tool" id="tool-2" title="Upload Data"><img src="/assets/icons/upload.svg" alt="Upload"></div>
+        <div class="tool" id="tool-3" title="Screenshot"><img src="/assets/icons/camera.svg" alt="Camera"></div>
+        <div class="tool" id="tool-4" title="Colors"><img src="/assets/icons/palette.svg" alt="Palette"></div>
+        <div class="tool" id="tool-5" title="Axis Settings"><img src="/assets/icons/settings.svg" alt="Settings"></div>
+        <div class="tool">
+            <span id="zoomLevel">100%</span>
+        </div>
+        <div class="tool" id="tool-center" title="Center Chart">⊚</div>
+    </div>
+
+    <div id="bottombar">
+        <div class="tool" id="tool-about">?</div>
+    </div>
+
+    <div id="colorPickerMenu" class="custom-menu" style="display: none;">
+        <div style="padding: 10px;">
+            <div id="colorOptions"></div>
+        </div>
+    </div>
+
+    <div id="graphTypeMenu" class="custom-menu" style="display: none;">
+        <div class="menu-item" data-template="/templates/xy.json">XY Chart</div>
+    </div>
+
+    <div id="dataSelectMenu" class="custom-menu" style="display: none;">
+        <div class="menu-item" data-file="/data/linear.csv">Linear</div>
+        <div class="menu-item" data-file="/data/quadratic.csv">Quadratic</div>
+        <div class="menu-item" data-file="/data/exponential.csv">Exponential</div>
+        <div class="menu-item" data-file="/data/sine.csv">Sine Wave</div>
+        <div class="menu-item" data-file="/data/scatter_random.csv">Random Scatter</div>
+        <div class="menu-item" data-file="/data/test.csv">Test Data</div>
+    </div>
+
+    <div id="axisSettingsMenu" class="custom-menu" style="display: none; min-width: 220px;">
+        <div style="padding: 8px;">
+            <!-- Scale -->
+            <div style="margin-bottom: 8px;">
+                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="color: #ccc; font-size: 12px;">Scale:</span>
+                    <select id="xScale" class="auto-apply" style="width: 80px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 11px;">
+                        <option value="linear">Linear</option>
+                        <option value="log">Log</option>
+                    </select>
+                </label>
+            </div>
+
+            <!-- Range -->
+            <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #444;">
+                <div style="color: #999; font-size: 11px; margin-bottom: 3px;">Range (auto if empty):</div>
+                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                    <span style="color: #ccc; font-size: 11px;">X:</span>
+                    <div style="display: flex; gap: 4px;">
+                        <input type="number" id="xMin" class="auto-apply" placeholder="min" step="any" style="width: 50px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 10px;">
+                        <input type="number" id="xMax" class="auto-apply" placeholder="max" step="any" style="width: 50px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 10px;">
+                    </div>
+                </label>
+                <label style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #ccc; font-size: 11px;">Y:</span>
+                    <div style="display: flex; gap: 4px;">
+                        <input type="number" id="yMin" class="auto-apply" placeholder="min" step="any" style="width: 50px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 10px;">
+                        <input type="number" id="yMax" class="auto-apply" placeholder="max" step="any" style="width: 50px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 10px;">
+                    </div>
+                </label>
+            </div>
+
+            <!-- Grid & Ticks -->
+            <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #444;">
+                <label style="display: flex; align-items: center; color: #ccc; font-size: 12px; margin-bottom: 2px;">
+                    <input type="checkbox" id="gridEnabled" class="auto-apply" checked style="margin-right: 6px;"> Grid
+                </label>
+                <label style="display: flex; align-items: center; color: #ccc; font-size: 12px;">
+                    <input type="checkbox" id="ticksEnabled" class="auto-apply" checked style="margin-right: 6px;"> Ticks
+                </label>
+            </div>
+
+            <!-- Grid Style -->
+            <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #444;">
+                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="color: #ccc; font-size: 12px;">Style:</span>
+                    <select id="gridStyle" class="auto-apply" style="width: 80px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 11px;">
+                        <option value="solid">Solid</option>
+                        <option value="dashed">Dashed</option>
+                        <option value="dotted">Dotted</option>
+                    </select>
+                </label>
+                <label style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #ccc; font-size: 12px;">Color:</span>
+                    <input type="color" id="gridColor" class="auto-apply" value="#e0e0e0" style="width: 40px; height: 20px; padding: 0; background: #444; border: 1px solid #555; border-radius: 3px; cursor: pointer;">
+                </label>
+            </div>
+
+            <!-- Frequency -->
+            <div>
+                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="color: #ccc; font-size: 12px;">Lines:</span>
+                    <input type="number" id="xGridFreq" class="auto-apply" value="5" min="2" max="20" style="width: 50px; padding: 2px 4px; background: #444; border: 1px solid #555; color: #f0f0f0; border-radius: 3px; font-size: 11px;">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept=".csv,.json" style="display: none;">
+
+    <div id="viewport">
+        <div id="svgContainer"></div>
+    </div>
+
+    <div id="notification"></div>
+
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Numbus</h2>
+                <p class="email-link"><a href="mailto:hello@numbus.xyz">hello@numbus.xyz</a></p>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="principle">
+                    <h3>Local-First</h3>
+                    <p>Your data never leaves your machine.</p>
+                </div>
+                <div class="principle">
+                    <h3>High-Performance</h3>
+                    <p>Built with Rust and WebAssembly for instant visualizations.</p>
+                </div>
+                <div class="principle">
+                    <h3>Simplicity</h3>
+                    <p>Clean interface. No clutter.</p>
+                </div>
+                <div class="modal-footer">
+                    <p>Built by two engineers in San Diego</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </body>
+</html>
